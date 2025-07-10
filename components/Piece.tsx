@@ -11,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Vector } from "react-native-redash";
 
+import { playCaptureSound, playMoveSound } from "../utils/sound";
 import { SIZE, toPosition, toTranslation } from "./Notation";
 
 const styles = StyleSheet.create({
@@ -68,6 +69,12 @@ const Piece = ({ id, startPosition, chess, onTurn, enabled }: PieceProps) => {
         isGestureActive.value = false;
       });
       if (move) {
+        // Play appropriate sound based on whether it's a capture move
+        if (move.captured) {
+          runOnJS(playCaptureSound)();
+        } else {
+          runOnJS(playMoveSound)();
+        }
         chess.move({ from, to });
         onTurn();
       }
