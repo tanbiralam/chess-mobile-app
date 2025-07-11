@@ -10,30 +10,35 @@ export default function GameScreen() {
     "White"
   );
 
+  console.log("Rendering GameScreen");
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.turnText}>{currentPlayer}'s Turn</Text>
-      </View>
+      <View style={styles.gameWrapper}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.turnText}>{currentPlayer}&apos;s Turn</Text>
+        </View>
 
-      <Chess />
+        <View style={styles.chessContainer}>
+          <Chess />
+        </View>
 
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.resignButton}
-          onPress={() => {
-            // Handle resign/forfeit
-            router.push("/");
-          }}
-        >
-          <Text style={styles.resignText}>Resign</Text>
-        </TouchableOpacity>
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={styles.resignButton}
+            onPress={() => {
+              router.push("/");
+            }}
+          >
+            <Text style={styles.resignText}>Resign</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -43,12 +48,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#242320",
+    position: "relative",
+  },
+  gameWrapper: {
+    flex: 1,
+    position: "relative",
+    zIndex: 1,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     padding: 20,
     paddingTop: 40,
+    zIndex: 2,
+  },
+  chessContainer: {
+    flex: 1,
+    position: "relative",
+    zIndex: 1,
   },
   backButton: {
     marginRight: 20,
@@ -61,6 +78,7 @@ const styles = StyleSheet.create({
   footer: {
     padding: 20,
     alignItems: "center",
+    zIndex: 2,
   },
   resignButton: {
     backgroundColor: "#ff444480",

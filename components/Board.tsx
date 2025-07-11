@@ -1,42 +1,34 @@
 import { Chess } from "chess.js";
 import React, { useCallback, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, View } from "react-native";
 
 import Background from "./Background";
 import Piece from "./Piece";
 
 const { width } = Dimensions.get("window");
-
-const styles = StyleSheet.create({
-  container: {
-    width,
-    height: width,
-  },
-});
+const BOARD_SIZE = Math.min(width * 0.9, 400);
 
 interface BoardProps {
   chess: Chess;
   onMove?: () => void;
+  currentPlayer: "w" | "b";
 }
 
-const Board = ({ chess, onMove }: BoardProps) => {
-  const [state, setState] = useState({
-    player: "w",
-    board: chess.board(),
-  });
+const Board = ({ chess, onMove, currentPlayer }: BoardProps) => {
+  const [board, setBoard] = useState(chess.board());
 
   const onTurn = useCallback(() => {
-    setState({
-      player: state.player === "w" ? "b" : "w",
-      board: chess.board(),
-    });
+    setBoard(chess.board());
     onMove?.();
-  }, [chess, state.player, onMove]);
+  }, [chess, onMove]);
 
   return (
-    <View style={styles.container}>
+    <View
+      className="flex-1 items-center justify-center"
+      style={{ width: BOARD_SIZE, height: BOARD_SIZE }}
+    >
       <Background />
-      {state.board.map((row, y) =>
+      {board.map((row, y) =>
         row.map((piece, x) => {
           if (piece !== null) {
             return (
@@ -46,7 +38,7 @@ const Board = ({ chess, onMove }: BoardProps) => {
                 startPosition={{ x, y }}
                 chess={chess}
                 onTurn={onTurn}
-                enabled={state.player === piece.color}
+                enabled={currentPlayer === piece.color}
               />
             );
           }
